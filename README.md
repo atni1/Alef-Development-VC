@@ -4,16 +4,20 @@ Befor start to open project you need install:
 
 Vuex for storing data
 
-    Npm
+  Npm
+  
     npm install vuex
     
-    Yarn
+  Yarn
+  
     yarn add vuex
 
 Vue-router for routing
     
-    Npm
+  Npm
+  
     npm install vue-router
     
-    Yarn
+  Yarn
+    
     yarn add vue-router
