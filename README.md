@@ -1,7 +1,11 @@
 # Alef-Development-VC
 
-Befor start to open project u need install:
+Befor start to open project you need install:
 
-    npm i vuex
+Vuex for storing data
 
-    npm i vue-router
+    npm install vuex
+
+Vue-router for routing
+
+    npm install vue-router
