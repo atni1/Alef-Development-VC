@@ -4,7 +4,7 @@
       <h3 class="title">Персональные данные</h3>
       <div class="personal__data__wrapper">
         <span class="personal__data__text">
-          <b>{{ firsName }}, {{ personAge }}</b>
+          <b><span>{{ firsName }}</span>, {{ personAge }}</b>
         </span>
       </div>
      
@@ -16,7 +16,7 @@
           v-for="child in childs"
           :key="child"
           class="child__data__text">
-          <b>{{ child.childName }}, {{ declOfNum(child.childAge, ['год', 'года', 'лет']) }}</b>
+          <b><span>{{ child.childName }}</span>, {{ declOfNum(child.childAge, ['год', 'года', 'лет']) }}</b>
         </span>
       </div>
     </div>
@@ -70,6 +70,10 @@ export default {
   font-size: 16px;
   line-height: 24px;
 }
+.personal__data__text span,
+.child__data__text span {
+  text-transform: capitalize;
+}
 .child__data__text {
   margin: 0 0 20px 0 ;
   background: #F1F1F1;
@@ -84,5 +88,16 @@ export default {
   flex-direction: column;
   margin: 20px 0 0 0;
   align-items: flex-start;
+}
+
+@media (max-width: 375px) {
+  .container {
+    width: 90%;
+  }
+}
+@media (min-width: 376px) and (max-width: 768px) {
+  .container {
+    width: 75%;
+  }
 }
 </style>

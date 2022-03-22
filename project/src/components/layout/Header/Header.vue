@@ -104,4 +104,44 @@ header::after {
 .link:first-child {
   margin: 0 24px 0 0;
 }
+.link:hover {
+  text-decoration: underline rgba(17, 17, 17, 0.48);
+}
+.link:active {
+  transform: scale(1.08);
+  text-decoration: underline rgba(17, 17, 17, 0.48);
+}
+
+@media (max-width: 375px) {
+  .header__wrapp {
+    margin: 24px 24px;
+    display: flex;
+    align-items: center;
+  }
+  .position__wrapper {
+    justify-content: flex-end;
+  }
+  .link:hover {
+    text-decoration: none;
+  }
+  .link:active {
+    text-decoration: underline rgba(17, 17, 17, 0.48);
+  }
+}
+@media (min-width: 376px) and (max-width: 768px) { 
+  .header__wrapp {
+    margin: 24px 80px;
+    display: flex;
+    align-items: center;
+  }
+  .position__wrapper {
+    justify-content: flex-end;
+  }
+  .link:hover {
+    text-decoration: none;
+  }
+  .link:active {
+    text-decoration: underline rgba(17, 17, 17, 0.48);
+  }
+}
 </style>

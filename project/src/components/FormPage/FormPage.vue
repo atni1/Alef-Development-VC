@@ -10,6 +10,7 @@
             autocomplete="off" 
             required 
             maxlength="15"
+            pattern="[A-Za-zА-Яа-яЁё]+(\s+[A-Za-zА-Яа-яЁё]+)?"
             v-model.trim="firsName"
             type="text">
         </div>
@@ -32,11 +33,10 @@
             @click.prevent="addNewChild"
             class="add__children__data"
           >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.13332 7.85555C1.50125 7.85555 0.988866 8.36794 0.988867 9C0.988867 9.63206 1.50126 10.1445 2.13332 10.1445L7.85544 10.1445L7.85545 15.8668C7.85545 16.4989 8.36784 17.0113 8.9999 17.0113C9.63196 17.0113 10.1444 16.4989 10.1444 15.8668L10.1443 10.1445L15.8667 10.1445C16.4988 10.1445 17.0112 9.63207 17.0112 9.00001C17.0112 8.36795 16.4988 7.85556 15.8667 7.85556L10.1443 7.85556L10.1443 2.13338C10.1443 1.50132 9.63195 0.988927 8.99989 0.988927C8.36783 0.988927 7.85544 1.50131 7.85544 2.13338L7.85544 7.85555L2.13332 7.85555Z"
-            fill="#01A7FD"/>/>
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path clip-rule="evenodd" d="M2.13332 7.85555C1.50125 7.85555 0.988866 8.36794 0.988867 9C0.988867 9.63206 1.50126 10.1445 2.13332 10.1445L7.85544 10.1445L7.85545 15.8668C7.85545 16.4989 8.36784 17.0113 8.9999 17.0113C9.63196 17.0113 10.1444 16.4989 10.1444 15.8668L10.1443 10.1445L15.8667 10.1445C16.4988 10.1445 17.0112 9.63207 17.0112 9.00001C17.0112 8.36795 16.4988 7.85556 15.8667 7.85556L10.1443 7.85556L10.1443 2.13338C10.1443 1.50132 9.63195 0.988927 8.99989 0.988927C8.36783 0.988927 7.85544 1.50131 7.85544 2.13338L7.85544 7.85555L2.13332 7.85555Z" />
             </svg>
-            Добавить ребенка
+            <span>Добавить ребенка</span>
           </button>
         </div>
         <div
@@ -52,6 +52,7 @@
               autocomplete="off" 
               required 
               maxlength="15"
+              pattern="[A-Za-zА-Яа-яЁё]+(\s+[A-Za-zА-Яа-яЁё]+)?"
               v-model.trim="child.childName"
               type="text">
           </div>
@@ -65,9 +66,13 @@
               v-model.number="child.childAge"
               type="number">
           </div>
-          <button
-            class="delete__btn"
-            @click.prevent="deleteChild( key )">Удалить</button>
+          <div class="delete__wrapper">
+            <button
+              class="delete__btn"
+              @click.prevent="deleteChild( key )">
+              Удалить
+            </button>
+          </div>
         </div>
       </div>
 
@@ -75,13 +80,18 @@
         <button class="btn__submit" type="submit">Сохранить</button>
       </div>
     </form>
+    <preloader ref="preloader" />
   </section>
 </template>
 
 <script>
 import { mapActions, mapMutations } from 'vuex'
+import Preloader from '../modalWindow/preloader.vue'
 
 export default {
+  components: {
+    Preloader,
+  },
   data: () => ({
     firsName: '',
     age: '',
@@ -102,11 +112,13 @@ export default {
       this.personalData();
       this.childsData();
 
-      this.showStore();
+      this.$refs.preloader.show = true
       setTimeout(() => {
         this.$router.push('/preview')
+        this.$refs.preloader.show = false
+        
       }, 2000)
-      
+      this.showStore();
     },
     addNewChild() {
       if (this.childs.length < 5 && this.childs.length >= 0) {
@@ -122,6 +134,7 @@ export default {
       this.SET_AGE(this.age)
     },
     childsData() {
+      const name = /^[a-zA-Zа-яёА-ЯЁ]+$/u
       this.SET_CHILDS(this.childs)
     },
   },
@@ -162,6 +175,7 @@ export default {
   line-height: 24px;
   padding: 26px 16px 6px 16px;
   cursor: pointer;
+  text-transform: capitalize;
 }
 .personal__data__name label,
 .personal__data__age label {
@@ -196,9 +210,18 @@ input::-webkit-inner-spin-button {
   border: 2px solid #01A7FD;
   box-sizing: border-box;
   border-radius: 100px;
+  fill: #01A7FD;
 }
 .add__children__data svg {
   margin: 0 8px 0 0;
+}
+.add__children__data:hover {
+  background: #01A7FD;
+  color: #FFFFFF;
+  fill: #FFFFFF; 
+}
+.add__children__data:active {
+  transform: scale(1.05);
 }
 
 .child__data__wrapper {
@@ -224,6 +247,7 @@ input::-webkit-inner-spin-button {
   line-height: 24px;
   padding: 26px 16px 6px 16px;
   cursor: pointer;
+  text-transform: capitalize;
 }
 .child__data__name label,
 .child__data__age label {
@@ -235,6 +259,10 @@ input::-webkit-inner-spin-button {
   font-size: 13px;
   line-height: 16px;
 }
+.delete__wrapper {
+  display: flex;
+  align-items: center;
+}
 .delete__btn {
   background: transparent;
   border: none;
@@ -242,9 +270,10 @@ input::-webkit-inner-spin-button {
   padding: 0;
   font-size: 14px;
   line-height: 24px;
-  display: flex;
-  align-items: center;
   color: #01A7FD;
+}
+.delete__btn:active {
+  transform: scale(1.08);
 }
 
 .btn__submit__wrapper {
@@ -261,5 +290,111 @@ input::-webkit-inner-spin-button {
   background: #01A7FD;
   border-radius: 100px;
   border: none;
+}
+.btn__submit:hover {
+  transform: scale(1.08);
+}
+
+@media (max-width: 375px) {
+  .container {
+    width: 95%;
+  }
+  .child__data__wrapper {
+    grid-template-columns: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .child__data__age,
+  .child__data__name {
+    margin: 0 0 10px 0;
+  }
+  .delete__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .add__children__data:hover {
+    background: #FFFFFF;
+    color: #01A7FD;
+    fill: #01A7FD; 
+  }
+  .add__children__data:active {
+    transform: scale(1.05);
+    background: #01A7FD;
+    color: #FFFFFF;
+    fill: #FFFFFF; 
+  }
+
+  .delete__btn {
+    background: transparent;
+    border: 1px solid #01A7FD;
+    font-weight: 400;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 24px;
+    padding: 5px 50px;
+    color: #01A7FD;
+  }
+  .delete__btn:active {
+    transform: scale(1.08);
+    background: #01A7FD;
+    color: #FFFFFF;
+  }
+  .btn__submit__wrapper {
+    justify-content: center;
+  }
+}
+@media (min-width: 376px) and (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+  .child__data__wrapper {
+    grid-template-columns: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .child__data__age,
+  .child__data__name {
+    margin: 0 0 10px 0;
+  }
+  .delete__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .add__children__data:hover {
+    background: #FFFFFF;
+    color: #01A7FD;
+    fill: #01A7FD; 
+  }
+  .add__children__data:active {
+    transform: scale(1.05);
+    background: #01A7FD;
+    color: #FFFFFF;
+    fill: #FFFFFF; 
+  }
+
+  .delete__btn {
+    width: 50%;
+    background: transparent;
+    border: 1px solid #01A7FD;
+    font-weight: 400;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 24px;
+    padding: 5px 50px;
+    text-align: center;
+    color: #01A7FD;
+  }
+  .delete__btn:active {
+    transform: scale(1.08);
+    background: #01A7FD;
+    color: #FFFFFF;
+  }
+  .btn__submit__wrapper {
+    justify-content: center;
+  }
 }
 </style>
